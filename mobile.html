@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>✈️ Flight Countdown</title>
+  <style>
+    body {
+      background: #fdf6f9;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+      color: #444;
+      padding: 20px;
+    }
+
+    h1 {
+      font-size: 2.2em;
+      color: #ff7ba9;
+      margin-bottom: 1em;
+      text-align: center;
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 20px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+      padding: 25px 30px;
+      margin: 15px;
+      width: 100%;
+      max-width: 400px;
+      text-align: center;
+    }
+
+    .label {
+      font-size: 1.1em;
+      margin-bottom: 10px;
+      color: #555;
+    }
+
+    .time {
+      font-size: 1.8em;
+      font-weight: bold;
+      color: #333;
+    }
+
+    .emoji {
+      font-size: 1.3em;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🛫 Your Flight Countdown</h1>
+
+  <div class="card">
+    <div class="label">Time until flight take-off <span class="emoji">⏰</span></div>
+    <div id="takeoff" class="time">Loading...</div>
+  </div>
+
+  <div class="card">
+    <div class="label">Time until flight arrival <span class="emoji">🛬</span></div>
+    <div id="arrival" class="time">Loading...</div>
+  </div>
+
+  <script>
+    try {
+      // Define exact UTC times (2025-08-07T03:05 ET = 07:05 UTC)
+      const takeoff = new Date("2025-08-07T07:05:00Z");
+      const arrival = new Date("2025-08-07T18:30:00Z");
+
+      function formatCountdown(targetDate) {
+        const now = new Date();
+        const diff = targetDate.getTime() - now.getTime();
+
+        if (diff <= 0) return "✈️ Already passed";
+
+        const totalSeconds = Math.floor(diff / 1000);
+        const days = Math.floor(totalSeconds / 86400);
+        const hours = Math.floor((totalSeconds % 86400) / 3600);
+        const minutes = Math.floor((totalSeconds % 3600) / 60);
+        const seconds = totalSeconds % 60;
+
+        return `${days}d ${hours}h ${minutes}m ${seconds}s`;
+      }
+
+      function updateCountdowns() {
+        document.getElementById("takeoff").textContent = formatCountdown(takeoff);
+        document.getElementById("arrival").textContent = formatCountdown(arrival);
+      }
+
+      updateCountdowns();
+      setInterval(updateCountdowns, 1000);
+    } catch (error) {
+      console.error("Countdown error:", error);
+      document.getElementById("takeoff").textContent = "⚠️ Error";
+      document.getElementById("arrival").textContent = "⚠️ Error";
+    }
+  </script>
+
+</body>
+</html>
